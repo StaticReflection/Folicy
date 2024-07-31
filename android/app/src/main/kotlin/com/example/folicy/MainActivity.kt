@@ -1,4 +1,4 @@
-package com.example.folicy
+package com.staticreflection.folicy
 
 import io.flutter.embedding.android.FlutterActivity
 
