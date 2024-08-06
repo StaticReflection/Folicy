@@ -1,7 +1,4 @@
 {
-    "@@locale": "zh",
-    "helloWorld": "你好世界!",
-    "@helloWorld": {
-        "description": "The conventional newborn programmer greeting"
-    }
+  "@@locale": "zh",
+  "needRoot": "需要Root"
 }
