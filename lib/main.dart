@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:folicy/services/init/init.dart';
+import 'package:folicy/bindings.dart';
 import 'package:folicy/routes/routes.dart';
 
 void main() async {
@@ -16,6 +17,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: AllBindings(),
       darkTheme: ThemeData.dark(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

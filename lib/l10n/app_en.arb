@@ -1,4 +1,6 @@
 {
   "@@locale": "en",
+  "generate": "Generate",
+  "home": "Home",
   "needRoot": "Need Root"
 }

@@ -1,4 +1,6 @@
 {
   "@@locale": "zh",
+  "generate": "生成",
+  "home": "首页",
   "needRoot": "需要Root"
 }
