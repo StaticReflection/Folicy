@@ -2,5 +2,9 @@
   "@@locale": "en",
   "generate": "Generate",
   "home": "Home",
-  "needRoot": "Need Root"
+  "kernelVersion": "Kernel version",
+  "needRoot": "Need Root",
+  "selinuxStatus": "SELinux status",
+  "systemFingerprint": "System fingerprint",
+  "systemVersion": "System version"
 }

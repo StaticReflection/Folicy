@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:folicy/constants/constants.dart';
 import 'package:folicy/controllers/home/home_page_navigation_controller.dart';
+import 'package:folicy/views/home/pages/home.dart';
 
 HomePageNavigationController homePageNavigationController = Get.find();
 
@@ -13,11 +13,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(Constants.appName)),
       body: Obx(() => IndexedStack(
             index: homePageNavigationController.index.value,
             children: const [
-              Placeholder(),
+              Home(),
               Placeholder(),
             ],
           )),
