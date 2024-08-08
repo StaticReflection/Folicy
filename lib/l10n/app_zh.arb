@@ -4,6 +4,8 @@
   "home": "首页",
   "kernelVersion": "内核版本",
   "needRoot": "需要Root",
+  "powerOff": "关机",
+  "reboot": "重启",
   "selinuxStatus": "SELinux 状态",
   "systemFingerprint": "系统指纹",
   "systemVersion": "系统版本"

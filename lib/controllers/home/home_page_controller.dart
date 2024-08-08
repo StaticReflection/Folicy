@@ -48,4 +48,12 @@ class HomePageController extends GetxController {
       SELinuxUtil.changeSELinuxStatus(SELinuxStatus.enforcing);
     }
   }
+
+  void powerOff() {
+    DeviceUtil.powerOff();
+  }
+
+  void reboot() {
+    DeviceUtil.reboot();
+  }
 }

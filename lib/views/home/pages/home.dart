@@ -15,6 +15,21 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(Constants.appName),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.refresh),
+            itemBuilder: (context) {
+              return <PopupMenuEntry>[
+                PopupMenuItem(
+                    onTap: () => homePageController.powerOff(),
+                    child: Text(AppLocalizations.of(context)!.powerOff)),
+                PopupMenuItem(
+                    onTap: () => homePageController.reboot(),
+                    child: Text(AppLocalizations.of(context)!.reboot)),
+              ];
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),

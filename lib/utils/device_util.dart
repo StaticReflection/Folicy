@@ -37,4 +37,12 @@ class DeviceUtil {
     });
     return version;
   }
+
+  static void powerOff() {
+    Root.exec(cmd: 'reboot -p');
+  }
+
+  static void reboot() {
+    Root.exec(cmd: 'reboot');
+  }
 }

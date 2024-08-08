@@ -4,6 +4,8 @@
   "home": "Home",
   "kernelVersion": "Kernel version",
   "needRoot": "Need Root",
+  "powerOff": "Power off",
+  "reboot": "Reboot",
   "selinuxStatus": "SELinux status",
   "systemFingerprint": "System fingerprint",
   "systemVersion": "System version"
