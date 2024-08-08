@@ -13,7 +13,9 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(Constants.appName)),
+      appBar: AppBar(
+        title: const Text(Constants.appName),
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
         child: SingleChildScrollView(
@@ -41,6 +43,8 @@ class Home extends StatelessWidget {
                 ),
               ),
               Card(
+                  child: Padding(
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   children: [
                     ListTile(
@@ -61,7 +65,7 @@ class Home extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              )),
             ],
           ),
         ),
