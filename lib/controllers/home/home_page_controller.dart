@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:folicy/constants/constants.dart';
 import 'package:folicy/enum/selinux_status.dart';
 import 'package:folicy/status.dart';
 import 'package:folicy/utils/device_util.dart';
 import 'package:folicy/utils/selinux_util.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePageController extends GetxController {
   RxString selinuxStatus = SELinuxStatus.unknown.key.obs;
@@ -55,5 +57,9 @@ class HomePageController extends GetxController {
 
   void reboot() {
     DeviceUtil.reboot();
+  }
+
+  void about() {
+    launchUrl(Constants.aboutAppUrl);
   }
 }

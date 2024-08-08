@@ -1,5 +1,6 @@
 {
   "@@locale": "zh",
+  "aboutFolicy": "关于Folicy",
   "generate": "生成",
   "home": "首页",
   "kernelVersion": "内核版本",

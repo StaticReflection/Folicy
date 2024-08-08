@@ -1,5 +1,6 @@
 {
   "@@locale": "en",
+  "aboutFolicy": "About Folicy",
   "generate": "Generate",
   "home": "Home",
   "kernelVersion": "Kernel version",

@@ -81,6 +81,13 @@ class Home extends StatelessWidget {
                   ],
                 ),
               )),
+              Card(
+                child: ListTile(
+                  title: Text(AppLocalizations.of(context)!.aboutFolicy),
+                  trailing: const Icon(Icons.arrow_forward),
+                  onTap: () => homePageController.about(),
+                ),
+              )
             ],
           ),
         ),
