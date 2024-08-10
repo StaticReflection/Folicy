@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:folicy/controllers/generate/generate_page_controller.dart';
 import 'package:get/get.dart';
+
+import 'package:folicy/controllers/generate/generate_page_controller.dart';
 
 GeneratePageController generatePageController = Get.find();
 
@@ -65,11 +66,29 @@ class Generate extends StatelessWidget {
                                       .getFromBuffer.value = value!)),
                             ],
                           )
-                        : ListTile(
-                            title:
-                                Text(AppLocalizations.of(context)!.notSelected),
-                            trailing: const Icon(Icons.arrow_forward),
+                        : Obx(
+                            () => ListTile(
+                              title: generatePageController.fileName.value ==
+                                      null
+                                  ? Text(
+                                      AppLocalizations.of(context)!.notSelected)
+                                  : Text(
+                                      generatePageController.fileName.value!),
+                              trailing: const Icon(Icons.arrow_forward),
+                              onTap: () => generatePageController.selectFile(),
+                            ),
                           ),
+                  ),
+                ),
+              ),
+              Card(
+                child: Obx(
+                  () => SwitchListTile(
+                    value: generatePageController.allowUntrustedApp.value,
+                    onChanged: (value) =>
+                        generatePageController.allowUntrustedApp.value = value,
+                    title:
+                        Text(AppLocalizations.of(context)!.allowUntrustedApp),
                   ),
                 ),
               ),
@@ -80,7 +99,8 @@ class Generate extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.arrow_forward),
         onPressed: () {
-          if (generatePageController.logSource.value == 1) {
+          if (generatePageController.logSource.value == 1 &&
+              generatePageController.fileName.value == null) {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -94,7 +114,37 @@ class Generate extends StatelessWidget {
                 ],
               ),
             );
+            return;
           }
+          generatePageController.generate();
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Obx(() => generatePageController.isDone.value
+                        ? Text(AppLocalizations.of(context)!.done)
+                        : Text(AppLocalizations.of(context)!.inProgress)),
+                    Obx(() => generatePageController.isDone.value
+                        ? const LinearProgressIndicator(value: 1)
+                        : const LinearProgressIndicator())
+                  ]),
+              actions: [
+                Obx(
+                  () => ElevatedButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: generatePageController.isDone.value
+                        ? Text(AppLocalizations.of(context)!.confirm)
+                        : Text(AppLocalizations.of(context)!.cancel),
+                  ),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );

@@ -1,4 +1,6 @@
+import 'package:path_provider/path_provider.dart';
 import 'package:root/root.dart';
+import 'dart:io';
 
 class DeviceUtil {
   static Future<String> getSystemVersion() async {
@@ -44,5 +46,11 @@ class DeviceUtil {
 
   static void reboot() {
     Root.exec(cmd: 'reboot');
+  }
+
+  static void clearTemporaryDirectory() async {
+    Directory dir = await getTemporaryDirectory();
+    dir.deleteSync(recursive: true);
+    dir.create();
   }
 }
