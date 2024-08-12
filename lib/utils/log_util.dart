@@ -6,9 +6,7 @@ class LogUtil {
   static Future<File> catchLogcat() async {
     final file = File('${(await getTemporaryDirectory()).path}/logCache.log');
 
-    Root.exec(cmd: 'logcat -d').then((value) async {
-      await file.writeAsString(value ?? '');
-    });
+    Root.exec(cmd: 'logcat -d > ${file.path}');
 
     return file;
   }
@@ -16,9 +14,7 @@ class LogUtil {
   static Future<File> catchDmesg() async {
     final file = File('${(await getTemporaryDirectory()).path}/logCache.log');
 
-    Root.exec(cmd: 'dmesg').then((value) async {
-      await file.writeAsString(value ?? '');
-    });
+    Root.exec(cmd: 'dmesg > ${file.path}');
 
     return file;
   }
