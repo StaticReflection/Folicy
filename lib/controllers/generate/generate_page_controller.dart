@@ -14,8 +14,10 @@ class GeneratePageController extends GetxController {
   Rx<String?> fileName = Rx(null); // 文件名
   // 选项
   RxBool allowUntrustedApp = false.obs; // 允许untrusted_app
+  RxBool grepAvc = true.obs; // 在生成规则前执行 "grep avc"
 
   RxDouble generateProgress = 0.0.obs; // 生成规则进度
+  bool cancel = false;
 
   Future<void> generate() async {
     generateProgress.value = 0.0;
@@ -31,18 +33,30 @@ class GeneratePageController extends GetxController {
       file = File(filePath.value!);
     }
 
-    ReceivePort progressReceivePort = ReceivePort();
+    if (grepAvc.value) {
+      file = await LogUtil.grepAvc(file!);
+    }
+
     ReceivePort isDoneReceivePort = ReceivePort();
+    ReceivePort progressReceivePort = ReceivePort();
     Isolate isolate = await Isolate.spawn(
       GenerateUtil.generate,
       GenerateParams(
-        logSource.value == 0 ? file!.path : filePath.value!,
+        file!.path,
         allowUntrustedApp.value,
         isDoneReceivePort.sendPort,
         progressReceivePort.sendPort,
       ),
     );
-    progressReceivePort.listen((progress) => generateProgress.value = progress);
+    progressReceivePort.listen((progress) {
+      generateProgress.value = progress;
+      if (cancel) {
+        cancel = false;
+        isolate.kill();
+        progressReceivePort.close();
+        isDoneReceivePort.close();
+      }
+    });
     isDoneReceivePort.listen((avc) async {
       await GenerateUtil.saveAvc(avc);
       isolate.kill();

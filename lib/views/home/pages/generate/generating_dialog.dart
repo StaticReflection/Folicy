@@ -22,7 +22,12 @@ class GeneratingDialog extends StatelessWidget {
       actions: [
         Obx(
           () => ElevatedButton(
-            onPressed: () => Get.back(),
+            onPressed: () {
+              if (generatePageController.generateProgress.value != 1) {
+                generatePageController.cancel = true;
+              }
+              Get.back();
+            },
             child: generatePageController.generateProgress.value == 1
                 ? Text(AppLocalizations.of(context)!.confirm)
                 : Text(AppLocalizations.of(context)!.cancel),

@@ -22,4 +22,15 @@ class LogUtil {
 
     return file;
   }
+
+  static Future<File> grepAvc(File file) async {
+    try {
+      final result =
+          File('${(await getTemporaryDirectory()).path}/grepAvc.log');
+      await Root.exec(cmd: 'grep avc ${file.path} > ${result.path}');
+      return result;
+    } catch (e) {
+      return file;
+    }
+  }
 }
