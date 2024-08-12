@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:folicy/controllers/home/home_page_navigation_controller.dart';
 import 'package:folicy/views/home/pages/home.dart';
-import 'package:folicy/views/home/pages/generate.dart';
+import 'package:folicy/views/home/pages/generate/generate.dart';
 
 HomePageNavigationController homePageNavigationController = Get.find();
 

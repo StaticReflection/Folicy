@@ -5,6 +5,7 @@
   "cancel": "Cancel",
   "confirm": "Confirm",
   "done": "Done",
+  "error": "Error",
   "fileNotSelected": "File not selected",
   "fromBuffer": "From buffer",
   "generate": "Generate",

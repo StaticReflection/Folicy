@@ -5,6 +5,7 @@
   "cancel": "取消",
   "confirm": "确定",
   "done": "完成",
+  "error": "错误",
   "fileNotSelected": "未选择文件",
   "fromBuffer": "从缓冲池",
   "generate": "生成",

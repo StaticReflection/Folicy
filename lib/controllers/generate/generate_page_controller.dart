@@ -1,25 +1,24 @@
 import 'dart:io';
+import 'dart:isolate';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 
-import 'package:folicy/utils/device_util.dart';
 import 'package:folicy/utils/generate_util.dart';
 import 'package:folicy/utils/log_util.dart';
 
 class GeneratePageController extends GetxController {
   RxInt logSource = 0.obs; // 日志来源, 0=从缓冲池, 1=选择文件
   RxInt getFromBuffer = 0.obs; // 缓冲池, 0=从logcat, 1=从demsg
+  // 当日志来源使用选择文件时
+  Rx<String?> filePath = Rx(null); // 文件路径
+  Rx<String?> fileName = Rx(null); // 文件名
+  // 选项
+  RxBool allowUntrustedApp = false.obs; // 允许untrusted_app
 
-  Rx<String?> filePath = Rx(null);
-  Rx<String?> fileName = Rx(null);
+  RxDouble generateProgress = 0.0.obs; // 生成规则进度
 
-  RxBool allowUntrustedApp = false.obs;
-
-  RxBool isDone = false.obs;
-
-  void generate() async {
-    isDone.value = false;
+  Future<void> generate() async {
+    generateProgress.value = 0.0;
     File? file;
 
     if (logSource.value == 0) {
@@ -28,19 +27,28 @@ class GeneratePageController extends GetxController {
       } else {
         file = await LogUtil.catchDmesg();
       }
-    }
-    try {
-      final avc = await compute(
-          GenerateUtil.generate,
-          GenerateParams(logSource.value == 0 ? file!.path : filePath.value!,
-              allowUntrustedApp.value));
-      await GenerateUtil.saveAvc(avc);
-      isDone.value = true;
-    } catch (error) {
-      isDone.value = true;
+    } else if (filePath.value != null) {
+      file = File(filePath.value!);
     }
 
-    DeviceUtil.clearTemporaryDirectory();
+    ReceivePort progressReceivePort = ReceivePort();
+    ReceivePort isDoneReceivePort = ReceivePort();
+    Isolate isolate = await Isolate.spawn(
+      GenerateUtil.generate,
+      GenerateParams(
+        logSource.value == 0 ? file!.path : filePath.value!,
+        allowUntrustedApp.value,
+        isDoneReceivePort.sendPort,
+        progressReceivePort.sendPort,
+      ),
+    );
+    progressReceivePort.listen((progress) => generateProgress.value = progress);
+    isDoneReceivePort.listen((avc) async {
+      await GenerateUtil.saveAvc(avc);
+      isolate.kill();
+      progressReceivePort.close();
+      isDoneReceivePort.close();
+    });
   }
 
   void selectFile() {

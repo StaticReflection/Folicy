@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'package:folicy/constants/constants.dart';
 
 class GenerateParams {
   final String logPath;
   final bool allowUntrustedApp;
+  SendPort isDoneSendPort;
+  SendPort progressSendPort;
 
-  GenerateParams(this.logPath, this.allowUntrustedApp);
+  GenerateParams(this.logPath, this.allowUntrustedApp, this.isDoneSendPort,
+      this.progressSendPort);
 }
 
 class GenerateUtil {
@@ -40,30 +44,26 @@ class GenerateUtil {
     sepolicy.writeAsString(sepolicyCilRules);
   }
 
-  static Future<Map<String, Map<String, Map<String, Set<String>>>>> generate(
-      GenerateParams params) async {
+  static void generate(GenerateParams params) {
     File file = File(params.logPath);
 
     final pattern = RegExp(
         r'.*avc:\s*denied\s*\{\s*(\w*?)\s\}.*scontext=\w*:\w*:(\w*?):.*tcontext=\w*:\w*:(\w*?):.*tclass=(\w*?)\s*permissive=.*');
 
     Map<String, Map<String, Map<String, Set<String>>>> avc = {};
-    final bytes = await file.readAsBytes();
+    final bytes = file.readAsBytesSync();
     String content;
-    try {
-      content = utf8.decode(bytes, allowMalformed: true);
-    } catch (e) {
-      // print('Error decoding file content: $e');
-      return {};
-    }
+    content = utf8.decode(bytes, allowMalformed: true);
+
     final lines = LineSplitter.split(content);
+    final int length = lines.length;
+    int count = 0;
     for (final line in lines) {
+      count++;
+      params.progressSendPort.send(count / length);
+
       final match = pattern.firstMatch(line);
-      if (match == null) {
-        // print('failed: match == null: ${line}');
-      } else if (match.groupCount != 4) {
-        // print('failed: match.groupCount==${match.groupCount}');
-      } else {
+      if (match != null && match.groupCount == 4) {
         String scontext = match.group(2)!;
         String tcontext = match.group(3)!;
         String tclass = match.group(4)!;
@@ -81,7 +81,6 @@ class GenerateUtil {
         avc[scontext]![tcontext]![tclass]!.add(perm);
       }
     }
-
-    return avc;
+    params.isDoneSendPort.send(avc);
   }
 }
