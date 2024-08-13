@@ -13,7 +13,6 @@ class GeneratePageController extends GetxController {
   Rx<String?> filePath = Rx(null); // 文件路径
   Rx<String?> fileName = Rx(null); // 文件名
   // 选项
-  RxBool allowUntrustedApp = false.obs; // 允许untrusted_app
   RxBool grepAvc = true.obs; // 在生成规则前执行 "grep avc"
 
   RxDouble generateProgress = 0.0.obs; // 生成规则进度
@@ -43,7 +42,6 @@ class GeneratePageController extends GetxController {
       GenerateUtil.generate,
       GenerateParams(
         file!.path,
-        allowUntrustedApp.value,
         isDoneReceivePort.sendPort,
         progressReceivePort.sendPort,
       ),

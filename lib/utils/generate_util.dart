@@ -5,12 +5,10 @@ import 'package:folicy/constants/constants.dart';
 
 class GenerateParams {
   final String logPath;
-  final bool allowUntrustedApp;
   SendPort isDoneSendPort;
   SendPort progressSendPort;
 
-  GenerateParams(this.logPath, this.allowUntrustedApp, this.isDoneSendPort,
-      this.progressSendPort);
+  GenerateParams(this.logPath, this.isDoneSendPort, this.progressSendPort);
 }
 
 class GenerateUtil {
@@ -69,12 +67,6 @@ class GenerateUtil {
         String tclass = match.group(4)!;
         String perm = match.group(1)!;
 
-        if (!params.allowUntrustedApp) {
-          if (RegExp(r'.*untrusted_app.*').hasMatch(scontext) ||
-              RegExp(r'.*untrusted_app.*').hasMatch(tcontext)) {
-            continue;
-          }
-        }
         avc.putIfAbsent(scontext, () => {});
         avc[scontext]!.putIfAbsent(tcontext, () => {});
         avc[scontext]![tcontext]!.putIfAbsent(tclass, () => {});

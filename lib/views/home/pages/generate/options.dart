@@ -19,11 +19,6 @@ class Options extends StatelessWidget {
           value: generatePageController.grepAvc.value,
           onChanged: (value) => generatePageController.grepAvc.value = value,
           title: const Text('grep avc'))),
-      Obx(() => SwitchListTile(
-          value: generatePageController.allowUntrustedApp.value,
-          onChanged: (value) =>
-              generatePageController.allowUntrustedApp.value = value,
-          title: Text(AppLocalizations.of(context)!.allowUntrustedApp))),
     ]));
   }
 }
